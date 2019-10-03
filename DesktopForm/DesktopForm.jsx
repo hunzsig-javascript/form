@@ -192,7 +192,7 @@ export default class DesktopForm extends Component {
       if (this.state.scope !== null) {
         this.setErrorResponse('');
         this.setLoading(true);
-        Api.connect().real(this.state.scope, v, (res) => {
+        Api.query().real(this.state.scope, v, (res) => {
           this.setLoading(false);
           if (res.code === 200) {
             if (this.state.refresh === true) {
