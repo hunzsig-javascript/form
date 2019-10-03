@@ -22,7 +22,7 @@ import {
 } from 'antd';
 import {CompactPicker} from 'react-color';
 import ReactQuill from 'react-quill';
-import Hoss from './../Hoss';
+import {Xoss} from 'oss';
 import './quill.css';
 
 import {Api} from 'api';
@@ -33,16 +33,16 @@ import ItemString from "./Items/String";
 import ItemPassword from "./Items/Password";
 import DefaultCol from "./Items/DefaultCol";
 
-import './Desktop.scss';
+import './DesktopForm.scss';
 
-const provincialJson = require('./../../assets/json/provincial').default;
-const municipalJson = require('./../../assets/json/municipal').default;
-const regionJson = require('./../../assets/json/region').default;
+const provincialJson = require('./../assets/json/provincial').default;
+const municipalJson = require('./../assets/json/municipal').default;
+const regionJson = require('./../assets/json/region').default;
 
 const {MonthPicker, YearPicker, RangePicker} = DatePicker;
 const TreeRoot = 'TREE';
 
-export default class Desktop extends Component {
+export default class DesktopForm extends Component {
   static defaultProps = {};
 
   constructor(props) {

@@ -1,1 +1,1 @@
-export {default as DesktopForm} from './Desktop';
+export {default as DesktopForm} from './DesktopForm';
