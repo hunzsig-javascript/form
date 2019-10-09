@@ -65,7 +65,24 @@ export default class Search extends Component {
             readOnly={true}
             required={item.params && item.params.required ? item.params.required : false}
             onChange={(evt) => {
-              this.props.onChange(this.formatter(evt));
+              const res = this.formatter(evt);
+              if (item.params) {
+                if (item.params.required) {
+                  this.state.errorMessage = !res ? item.label + I18n.tr('isRequired') : '';
+                }
+                if (item.params.minLength && res.length < item.params.minLength) {
+                  this.state.errorMessage = item.label + ' ' + I18n.tr('tooShort');
+                }
+                if (item.params.maxLength && res.length > item.params.maxLength) {
+                  this.state.errorMessage = item.label + ' ' + I18n.tr('tooLong');
+                }
+              }
+              this.setState({
+                errorMessage: this.state.errorMessage,
+              });
+
+              this.props.onChange(res);
+              onError(this.state.errorMessage);
             }}
           />
           <div>
