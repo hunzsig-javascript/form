@@ -1,23 +1,38 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Input, Button} from 'antd';
+import {Row, Col, Icon, Input} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
 
-import "./SearchText.scss";
+import "./ItemInteger.scss";
 
-export default class SearchText extends Component {
+export default class String extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       errorMessage: '',
-      value: null,
     };
   }
 
-  formatter = (evt) => {
-    return evt.target.value;
+  formatter = (evt, min, max) => {
+    let value = evt.target.value.trim();
+    if (value === '-') {
+      return value;
+    }
+    if (value === '' || value === null || !value) {
+      return value;
+    }
+    if (value < min) {
+      value = min;
+    } else if (value > max) {
+      value = max;
+    }
+    value = parseInt(value, 10);
+    if (isNaN(value) || value === Infinity) {
+      value = '';
+    }
+    return value;
   };
 
   render() {
@@ -30,59 +45,39 @@ export default class SearchText extends Component {
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
-      <Row className="ItemSearchText">
+      <Row className="ItemNumber">
         <Col {...DefaultCol[col].label} className={`label ${required ? 'required' : ''}`}>
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Input.TextArea
+          <Input
             className={className}
             size={size}
             placeholder={I18n.tr('pleaseType') + item.name}
+            allowClear={true}
             defaultValue={defaultValue}
             onChange={(evt) => {
-              this.renderEmail(evt);
-              const res = this.formatter(evt);
+              if (isNaN(evt.target.value)) {
+                this.state.errorMessage = I18n.tr('pleaseFillRightInt');
+              } else if (!Number.isInteger(evt.target.value)) {
+                this.state.errorMessage = I18n.tr('pleaseFillRightInt');
+              }
+              const res = this.formatter(evt, item.min, item.max);
               if (item.params) {
                 if (item.params.required) {
                   this.state.errorMessage = !res ? item.label + I18n.tr('isRequired') : '';
-                }
-                if (item.params.minLength && res.length < item.params.minLength) {
-                  this.state.errorMessage = item.label + ' ' + I18n.tr('tooShort');
-                }
-                if (item.params.maxLength && res.length > item.params.maxLength) {
-                  this.state.errorMessage = item.label + ' ' + I18n.tr('tooLong');
                 }
               }
               this.setState({
                 value: res,
                 errorMessage: this.state.errorMessage,
               });
+              onChange(res);
               onError(this.state.errorMessage);
             }}
             {...item.params}
           />
-          <div style={{position: 'absolute', right: '5px', top: '5px'}}>
-            <Button
-              type="dashed"
-              size="small"
-              onClick={() => {
-                if (typeof item.onSearch === 'function') {
-                  const callback = (callbackData = undefined) => {
-                    this.state.value = callbackData;
-                    this.setState({
-                      value: this.state.value,
-                    });
-                    onChange(this.state.value)
-                  };
-                  item.onSearch(this.state.value, callback);
-                }
-              }}
-            >
-              {item.nameSub}
-            </Button>
-          </div>
           {this.state.errorMessage !== '' && <Error message={this.state.errorMessage}/>}
         </Col>
       </Row>

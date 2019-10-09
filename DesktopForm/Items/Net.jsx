@@ -43,7 +43,7 @@ export default class Net extends Component {
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
-      <Row className="ItemEmail">
+      <Row className="ItemNet">
         <Col {...DefaultCol[col].label} className={`label ${required ? 'required' : ''}`}>
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}

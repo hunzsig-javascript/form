@@ -34,6 +34,9 @@ import ItemEmail from "./Items/Email";
 import ItemSearch from "./Items/Search";
 import ItemSearchText from "./Items/SearchText";
 import ItemTextArea from "./Items/TextArea";
+import ItemNet from "./Items/Net";
+import ItemNumber from "./Items/Number";
+import ItemInteger from "./Items/Integer";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -64,12 +67,10 @@ export default class DesktopForm extends Component {
       onSuccess: this.props.form.onSuccess,
       items: this.props.form.items || [],
       values: {},
-      valuesShadow: {},
       nodeShadow: {},
       loading: false,
       errorStatus: this.props.form.defaultErrorStatus || false,
       errorResponse: '',
-      renderNet: [],
     };
     this.state.items.forEach((val) => {
       if (Array.isArray(val.values) && val.values.length > 0) {
@@ -93,9 +94,6 @@ export default class DesktopForm extends Component {
     if (typeof this.state.onChange === 'function') {
       this.state.onChange(values);
     }
-    this.setState({
-      valuesShadow: values,
-    });
   };
 
   setErrorResponse = (error) => {
@@ -114,28 +112,6 @@ export default class DesktopForm extends Component {
     this.setState({
       loading: loading,
     });
-  };
-
-  checkNumber = (rule, values, callback) => {
-    if (!values) {
-      callback();
-    } else if (isNaN(values)) {
-      callback(I18n.tr('pleaseFillRightNum'));
-    } else {
-      callback();
-    }
-  };
-
-  checkInteger = (rule, values, callback) => {
-    if (!values) {
-      callback();
-    } else if (isNaN(values)) {
-      callback(I18n.tr('pleaseFillRightInt'));
-    } else if (!Number.isInteger(values)) {
-      callback(I18n.tr('pleaseFillRightInt'));
-    } else {
-      callback();
-    }
   };
 
   set = (values) => {
@@ -351,7 +327,6 @@ export default class DesktopForm extends Component {
     });
   };
 
-
   renderTreeSelect = (data, prevKey) => {
     const tpl = [];
     data.forEach((d) => {
@@ -385,26 +360,6 @@ export default class DesktopForm extends Component {
     return tpl.map((t) => {
       return t;
     });
-  };
-
-  renderSearchRemove = (val) => {
-    let tpl;
-    if (this.state.values[val.field] && this.state.values[val.field].length > 0) {
-      tpl = (
-        <Icon
-          type="close-circle"
-          theme="filled"
-          onClick={
-            () => {
-              this.state.nodeShadow[val.field].input.input.value = '';
-              this.state.values[val.field] = undefined;
-              this.formChange(this.state.values);
-            }
-          }
-        />
-      );
-    }
-    return tpl;
   };
 
   renderFormItem = (c, item, idx) => {
@@ -493,49 +448,15 @@ export default class DesktopForm extends Component {
       case 'net':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <Input.Group compact className={`fromItemWidth${c} ${item.type}`}>
-                  <Select
-                    style={{width: '20%'}}
-                    defaultValue=""
-                    onChange={(value) => {
-                      this.state.values[item.field] = value;
-                      this.formChange(this.state.values);
-                    }}
-                  >
-                    <Select.Option value="" disabled={true}>{I18n.tr('protocol')}</Select.Option>
-                    <Select.Option value="http://">http://</Select.Option>
-                    <Select.Option value="https://">https://</Select.Option>
-                  </Select>
-                  <IceFormBinder
-                    type="url"
-                    name={item.field}
-                    message={I18n.tr('URLFormat')}
-                    valueFormatter={(result) => {
-                      return this.binderValueFormatter(item, result);
-                    }}
-                  >
-                    <AutoComplete
-                      style={{width: '80%'}}
-                      size={size}
-                      placeholder={I18n.tr('pleaseType') + item.name}
-                      onChange={this.renderNet}
-                      filterOption={false}
-                      hasClear={true}
-                      {...item.params}
-                    >
-                      {this.state.renderNet}
-                    </AutoComplete>
-                  </IceFormBinder>
-                </Input.Group>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemNet
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
@@ -589,29 +510,15 @@ export default class DesktopForm extends Component {
       case 'number':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} validator={this.checkNumber} valueFormatter={(result) => {
-                  return this.binderValueFormatter(item, result);
-                }}>
-                  <Input
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    placeholder={I18n.tr('pleaseType') + item.name}
-                    allowClear={true}
-                    ref={node => this.state.nodeShadow[item.field] = node}
-                    defaultValue={this.state.values[item.field]}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                {(this.state.values[item.field] > 0 || this.state.values[item.field] < 0) &&
-                <IceFormError name={item.field} style={{whiteSpace: 'nowrap'}}/>}
-              </Col>
-            </Row>
+            <ItemNumber
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
@@ -619,29 +526,15 @@ export default class DesktopForm extends Component {
       case 'integer':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} validator={this.checkInteger} valueFormatter={(result) => {
-                  return this.binderValueFormatter(item, result);
-                }}>
-                  <Input
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    placeholder={I18n.tr('pleaseType') + item.name}
-                    allowClear={true}
-                    ref={node => this.state.nodeShadow[item.field] = node}
-                    defaultValue={this.state.values[item.field]}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                {(this.state.values[item.field] > 0 || this.state.values[item.field] < 0) &&
-                <IceFormError name={item.field} style={{whiteSpace: 'nowrap'}}/>}
-              </Col>
-            </Row>
+            <ItemInteger
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
