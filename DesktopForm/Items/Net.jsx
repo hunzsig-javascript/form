@@ -74,11 +74,11 @@ export default class Net extends Component {
                 this.renderNet(evt);
                 const res = this.formatter(evt);
                 if (this.state.value === '') {
-                  this.state.errorMessage = I18n.tr('protocol') + I18n.tr('isRequired');
+                  this.state.errorMessage = I18n.tr('pleaseChoose') + I18n.tr('protocol');
                 }
                 if (item.params) {
                   if (item.params.required) {
-                    this.state.errorMessage = !res ? item.label + I18n.tr('isRequired') : '';
+                    this.state.errorMessage += !res ? item.label + I18n.tr('isRequired') : '';
                   }
                 }
                 this.setState({

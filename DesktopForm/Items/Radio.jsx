@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Switch} from 'antd';
+import {Row, Col, Icon, Radio} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
 
-import "./Switch.scss";
+import "./Radio.scss";
 
-export default class Switch extends Component {
+export default class Radio extends Component {
 
   constructor(props) {
     super(props);
@@ -16,7 +16,7 @@ export default class Switch extends Component {
   }
 
   formatter = (evt) => {
-    return evt;
+    return evt.target.value;
   };
 
   render() {
@@ -35,9 +35,11 @@ export default class Switch extends Component {
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Switch
+          <Radio.Group
+            defaultValue={defaultValue}
             className={className}
             size={size}
+            options={map}
             defaultChecked={defaultValue}
             onChange={(evt) => {
               const res = this.formatter(evt);
@@ -52,7 +54,6 @@ export default class Switch extends Component {
               onChange(res);
               onError(this.state.errorMessage);
             }}
-            {...item.params}
           />
           {this.state.errorMessage !== '' && <Error message={this.state.errorMessage}/>}
         </Col>
