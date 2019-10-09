@@ -37,6 +37,7 @@ import ItemTextArea from "./Items/TextArea";
 import ItemNet from "./Items/Net";
 import ItemNumber from "./Items/Number";
 import ItemInteger from "./Items/Integer";
+import ItemSwitch from "./Items/Switch";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -541,23 +542,15 @@ export default class DesktopForm extends Component {
       case 'switch':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}>
-                  <Switch
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    defaultChecked={this.state.values[item.field]}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemSwitch
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
