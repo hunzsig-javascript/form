@@ -4,18 +4,13 @@ import {
   Col,
   Alert,
   message,
-  Select,
   Cascader,
   Icon,
   Button,
   Tree,
   TreeSelect,
-  Input,
-  Radio,
   DatePicker,
   TimePicker,
-  Switch,
-  Checkbox,
   Slider, // Range
   Rate, // Rating
 } from 'antd';
