@@ -41,6 +41,7 @@ import ItemSwitch from "./Items/Switch";
 import ItemRadio from "./Items/Radio";
 import ItemCheckbox from "./Items/Checkbox";
 import ItemCheckboxCol from "./Items/CheckboxCol";
+import ItemSelect from "./Items/Select";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -627,38 +628,17 @@ export default class DesktopForm extends Component {
       case 'select':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type={item.binderType || 'string'} name={item.field}
-                               message={I18n.tr('pleaseChoose') + item.name}>
-                  <Select
-                    allowClear={!required}
-                    showSearch={showSearch}
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    placeholder={I18n.tr('pleaseChoose') + item.name}
-                    defaultValue={this.state.values[item.field]}
-                    filterOption={(input, option) => {
-                      if (option.props.disabled === true) return false;
-                      else if (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0) return true;
-                      else if (`${option.props.value}`.indexOf(input) >= 0) return true;
-                      return false;
-                    }}
-                    {...item.params}
-                  >
-                    {map.map((m) => {
-                      return <Select.Option key={m.value} value={m.value}
-                                            disabled={m.disabled || false}>{m.label}</Select.Option>;
-                    })}
-                  </Select>
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemSelect
+              required={required}
+              item={item}
+              size={size}
+              map={map}
+              showSearch={showSearch}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
