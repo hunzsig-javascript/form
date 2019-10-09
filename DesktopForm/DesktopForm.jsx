@@ -31,6 +31,7 @@ import ItemString from "./Items/String";
 import ItemPassword from "./Items/Password";
 import ItemColor from "./Items/Color";
 import ItemEmail from "./Items/Email";
+import ItemSearch from "./Items/Search";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -482,49 +483,16 @@ export default class DesktopForm extends Component {
       case 'search':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <span>{I18n.tr('pleaseType') + item.name}</span>
-                <Input
-                  style={{position: 'absolute', left: 0, top: 0, bottom: 0, right: 0, opacity: 0}}
-                  placeholder={I18n.tr('pleaseType') + item.name}
-                  value={this.state.values[item.field]}
-                  readOnly={true}
-                  required={item.params && item.params.required ? item.params.required : false}
-                  onChange={(result) => {
-                    return this.binderValueFormatter(item, result);
-                  }}
-                />
-                <div>
-                  <Input.Search
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    placeholder={(item.params && item.params.placeholder) ? item.params.placeholder : `${I18n.tr('pleaseChooseByClick')}${item.name}`}
-                    defaultValue={this.state.values[item.field + '_shadow'] ? this.state.values[item.field + '_shadow'] : ''}
-                    ref={node => this.state.nodeShadow[item.field] = node}
-                    readOnly={true}
-                    allowClear={true}
-                    enterButton={item.nameSub}
-                    onSearch={() => {
-                      if (typeof item.onSearch === 'function') {
-                        const callback = (callbackData = undefined, callbackLabel = '') => {
-                          this.state.nodeShadow[item.field].input.input.value = callbackLabel;
-                          this.state.values[item.field] = callbackData;
-                          this.formChange(this.state.values);
-                        };
-                        item.onSearch(this.state.values[item.field], callback);
-                      }
-                    }}
-                    addonAfter={this.renderSearchRemove(item)}
-                  />
-                </div>
-                <DesktopFormError message={this.state.error[item.field]}/>
-              </Col>
-            </Row>
+            <ItemSearch
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              shadowValue={this.state.values[item.field + '_shadow']}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;

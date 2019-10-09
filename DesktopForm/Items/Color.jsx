@@ -48,7 +48,7 @@ export default class Color extends Component {
               this.setState({
                 errorMessage: this.state.errorMessage,
               });
-              onChange(this.formatter(evt));
+              onChange(res);
               onError(this.state.errorMessage);
             }}
             {...item.params}

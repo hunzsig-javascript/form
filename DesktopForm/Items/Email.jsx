@@ -40,6 +40,7 @@ export default class Email extends Component {
     const size = this.props.size;
     const col = this.props.col;
     const defaultValue = this.props.defaultValue;
+    const className = `col${col} slice` + (this.state.errorMessage !== '' ? ' error' : '');
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
@@ -50,7 +51,7 @@ export default class Email extends Component {
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
           <AutoComplete
-            className={`fromItemWidth${c} ${item.type}`}
+            className={className}
             size={size}
             placeholder={I18n.tr('pleaseType') + item.name}
             filterOption={false}
@@ -73,7 +74,7 @@ export default class Email extends Component {
               this.setState({
                 errorMessage: this.state.errorMessage,
               });
-              onChange(this.formatter(evt));
+              onChange(res);
               onError(this.state.errorMessage);
             }}
             {...item.params}
