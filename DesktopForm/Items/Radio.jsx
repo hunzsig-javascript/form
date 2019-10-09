@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Radio} from 'antd';
+import {Row, Col, Icon, Radio as RadioAntd} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
@@ -36,7 +36,7 @@ export default class Radio extends Component {
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Radio.Group
+          <RadioAntd.Group
             defaultValue={defaultValue}
             className={className}
             size={size}

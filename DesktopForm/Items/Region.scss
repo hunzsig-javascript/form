@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-.ItemSelect {
+.ItemRegion {
 
   .icon {
     margin-right: 3px;
@@ -34,7 +34,7 @@
     .col4.slice { width: 100% }
 
     @media (min-width: 1200px) {
-      .col1.slice { width: auto }
+      .col1.slice { width: 90% }
     }
   }
 

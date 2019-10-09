@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Checkbox} from 'antd';
+import {Row, Col, Icon, Checkbox as CheckboxAntd} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
@@ -35,7 +35,7 @@ export default class Checkbox extends Component {
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Checkbox.Group
+          <CheckboxAntd.Group
             className={className}
             defaultValue={defaultValue}
             dataSource={map}

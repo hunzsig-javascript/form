@@ -38,13 +38,13 @@ import ItemCheckbox from "./Items/Checkbox";
 import ItemCheckboxCol from "./Items/CheckboxCol";
 import ItemSelect from "./Items/Select";
 import ItemCascader from "./Items/Cascader";
+import ItemRegion from "./Items/Region";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
 
 const provincialJson = require('./../assets/json/provincial').default;
 const municipalJson = require('./../assets/json/municipal').default;
-const regionJson = require('./../assets/json/region').default;
 
 const {MonthPicker, YearPicker, RangePicker} = DatePicker;
 const TreeRoot = 'TREE';
@@ -655,35 +655,20 @@ export default class DesktopForm extends Component {
       case 'region':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}
-                               valueFormatter={(v1, v2) => {
-                                 return this.binderValueFormatter(item, v1, v2);
-                               }}>
-                  {
-                    regionJson &&
-                    <Cascader
-                      expandTrigger="hover"
-                      size={size}
-                      options={regionJson}
-                      defaultValue={this.state.values[item.field]}
-                      allowClear={true}
-                      placeholder={I18n.tr('pleaseChoose') + item.name}
-                      showSearch={(inputValue, path) => {
-                        return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
-                      }}
-                      {...item.params}
-                    />
-                  }
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemRegion
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={
+                (result) => {
+                  this.setField(item.field, result[0]);
+                  this.state.values[item.field + '_label'] = result[1];
+                }
+              }
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;

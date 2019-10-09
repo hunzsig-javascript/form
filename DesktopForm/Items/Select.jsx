@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Select} from 'antd';
+import {Row, Col, Icon, Select as SelectAntd} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
@@ -36,7 +36,7 @@ export default class Select extends Component {
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Select
+          <SelectAntd
             allowClear={!required}
             className={className}
             size={size}
@@ -66,15 +66,15 @@ export default class Select extends Component {
           >
             {map.map((m) => {
               return (
-                <Select.Option
+                <SelectAntd.Option
                   key={m.value}
                   value={m.value}
                   disabled={m.disabled || false}>
                   {m.label}
-                </Select.Option>
+                </SelectAntd.Option>
               );
             })}
-          </Select>
+          </SelectAntd>
           {this.state.errorMessage !== '' && <Error message={this.state.errorMessage}/>}
         </Col>
       </Row>
