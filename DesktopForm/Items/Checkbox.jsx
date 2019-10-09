@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Radio} from 'antd';
+import {Row, Col, Icon, Checkbox} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
 
-import "./Radio.scss";
+import "./Checkbox.scss";
 
-export default class Radio extends Component {
+export default class Checkbox extends Component {
 
   constructor(props) {
     super(props);
@@ -16,31 +16,29 @@ export default class Radio extends Component {
   }
 
   formatter = (evt) => {
-    return evt.target.value;
+    return evt;
   };
 
   render() {
     const required = this.props.required;
     const item = this.props.item;
-    const size = this.props.size;
     const col = this.props.col;
+    const map = this.props.map;
     const defaultValue = this.props.defaultValue;
     const className = `col${col} slice` + (this.state.errorMessage !== '' ? ' error' : '');
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
-      <Row className="ItemRadio">
+      <Row className="ItemCheckbox">
         <Col {...DefaultCol[col].label} className={`label ${required ? 'required' : ''}`}>
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Radio.Group
-            defaultValue={defaultValue}
+          <Checkbox.Group
             className={className}
-            size={size}
-            options={map}
-            defaultChecked={defaultValue}
+            defaultValue={defaultValue}
+            dataSource={map}
             onChange={(evt) => {
               const res = this.formatter(evt);
               if (item.params) {
@@ -54,6 +52,7 @@ export default class Radio extends Component {
               onChange(res);
               onError(this.state.errorMessage);
             }}
+            {...item.params}
           />
           {this.state.errorMessage !== '' && <Error message={this.state.errorMessage}/>}
         </Col>

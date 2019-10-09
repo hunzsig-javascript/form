@@ -39,6 +39,8 @@ import ItemNumber from "./Items/Number";
 import ItemInteger from "./Items/Integer";
 import ItemSwitch from "./Items/Switch";
 import ItemRadio from "./Items/Radio";
+import ItemCheckbox from "./Items/Checkbox";
+import ItemCheckboxCol from "./Items/CheckboxCol";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -573,71 +575,30 @@ export default class DesktopForm extends Component {
       case 'checkbox':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}>
-                  <Checkbox.Group
-                    className={`fromItemWidth${c} ${item.type}`}
-                    defaultValue={this.state.value}
-                    dataSource={map}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemCheckbox
+              required={required}
+              item={item}
+              map={map}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
       case 'checkboxCol':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}>
-                  <Checkbox.Group
-                    className={`fromItemWidth${c} ${item.type}`}
-                    defaultValue={this.state.value || []}
-                    {...item.params}
-                  >
-                    {
-                      [true].map((x, cbcIdx1) => {
-                        return (
-                          <Row key={cbcIdx1} wrap>
-                            {
-                              map.map((cb, cbcIdx2) => {
-                                return (
-                                  <Col
-                                    key={cbcIdx2}
-                                    {...{
-                                      xxs: 24,
-                                      xs: Math.max(item.checkboxCol || 12),
-                                      s: Math.max(item.checkboxCol || 12),
-                                      m: Math.max(item.checkboxCol || 8)
-                                    }}
-                                  >
-                                    <Checkbox key={cb.value} value={cb.value}>{cb.label}</Checkbox>
-                                  </Col>
-                                );
-                              })
-                            }
-                          </Row>
-                        );
-                      })
-                    }
-                  </Checkbox.Group>
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemCheckboxCol
+              required={required}
+              item={item}
+              map={map}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;

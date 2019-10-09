@@ -29,7 +29,7 @@ export default class Switch extends Component {
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
-      <Row className="ItemPassword">
+      <Row className="ItemSwitch">
         <Col {...DefaultCol[col].label} className={`label ${required ? 'required' : ''}`}>
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
