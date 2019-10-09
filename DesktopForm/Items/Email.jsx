@@ -1,22 +1,37 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Input} from 'antd';
+import {Row, Col, Icon, AutoComplete} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
 
-import "./String.scss";
+import "./Email.scss";
 
-export default class String extends Component {
+export default class Email extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       errorMessage: '',
+      renderEmail: [],
     };
   }
 
   formatter = (evt) => {
-    return evt.target.value;
+    return evt.trim();
+  };
+
+
+  renderEmail = (value) => {
+    let renderEmail;
+    if (!value || value.indexOf('@') >= 0) {
+      renderEmail = [];
+    } else {
+      renderEmail = ['qq.com', '163.com', '126.com', 'sina.com', 'hotmail.com', 'gmail.com'].map((domain) => {
+        const email = `${value}@${domain}`;
+        return <AutoComplete.Option key={email}>{email}</AutoComplete.Option>;
+      });
+    }
+    this.setState({renderEmail: renderEmail});
   };
 
   render() {
@@ -25,23 +40,24 @@ export default class String extends Component {
     const size = this.props.size;
     const col = this.props.col;
     const defaultValue = this.props.defaultValue;
-    const className = `col${col} slice` + (this.state.errorMessage !== '' ? ' error' : '');
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
-      <Row className="ItemString">
+      <Row className="ItemEmail">
         <Col {...DefaultCol[col].label} className={`label ${required ? 'required' : ''}`}>
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Input
-            className={className}
+          <AutoComplete
+            className={`fromItemWidth${c} ${item.type}`}
             size={size}
-            allowClear={true}
-            placeholder={I18n.tr('pleaseType') + item.label}
+            placeholder={I18n.tr('pleaseType') + item.name}
+            filterOption={false}
+            hasClear={true}
             defaultValue={defaultValue}
             onChange={(evt) => {
+              this.renderEmail(evt);
               const res = this.formatter(evt);
               if (item.params) {
                 if (item.params.required) {
@@ -61,7 +77,9 @@ export default class String extends Component {
               onError(this.state.errorMessage);
             }}
             {...item.params}
-          />
+          >
+            {this.state.renderEmail}
+          </AutoComplete>
           {this.state.errorMessage !== '' && <Error message={this.state.errorMessage}/>}
         </Col>
       </Row>

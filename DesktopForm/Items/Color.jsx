@@ -17,7 +17,7 @@ export default class Color extends Component {
   }
 
   formatter = (evt) => {
-    return evt.target.value.trim();
+    return evt.hex;
   };
 
   render() {

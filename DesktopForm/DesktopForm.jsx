@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   Row,
   Col,
-  AutoComplete,
   Alert,
   message,
   Select,
@@ -31,6 +30,7 @@ import ItemConst from "./Items/Const";
 import ItemString from "./Items/String";
 import ItemPassword from "./Items/Password";
 import ItemColor from "./Items/Color";
+import ItemEmail from "./Items/Email";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -67,7 +67,6 @@ export default class DesktopForm extends Component {
       errorStatus: this.props.form.defaultErrorStatus || false,
       errorResponse: '',
       renderNet: [],
-      renderEmail: [],
     };
     this.state.items.forEach((val) => {
       if (Array.isArray(val.values) && val.values.length > 0) {
@@ -352,19 +351,6 @@ export default class DesktopForm extends Component {
       });
     }
     this.setState({renderNet});
-  };
-
-  renderEmail = (value) => {
-    let renderEmail;
-    if (!value || value.indexOf('@') >= 0) {
-      renderEmail = [];
-    } else {
-      renderEmail = ['qq.com', '163.com', '126.com', 'sina.com', 'hotmail.com', 'gmail.com'].map((domain) => {
-        const email = `${value}@${domain}`;
-        return <AutoComplete.Option key={email}>{email}</AutoComplete.Option>;
-      });
-    }
-    this.setState({renderEmail});
   };
 
   renderTree = (data, prevKey) => {
@@ -670,31 +656,15 @@ export default class DesktopForm extends Component {
       case 'email':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} type="email" message={I18n.tr('pleaseTypeRight') + item.name}
-                               valueFormatter={(result) => {
-                                 return this.binderValueFormatter(item, result);
-                               }}>
-                  <AutoComplete
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    placeholder={I18n.tr('pleaseType') + item.name}
-                    onChange={this.renderEmail}
-                    filterOption={false}
-                    hasClear={true}
-                    {...item.params}
-                  >
-                    {this.state.renderEmail}
-                  </AutoComplete>
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemEmail
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
