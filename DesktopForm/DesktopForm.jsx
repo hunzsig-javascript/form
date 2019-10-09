@@ -214,45 +214,6 @@ export default class DesktopForm extends Component {
     }
   };
 
-  renderSuffix = (val) => {
-    if (this.state.valuesShadow[val.field]) {
-      return (
-        <div>
-          {
-            val.params && val.params.maxLength > 0 &&
-            <span style={{color: '#777777'}}>
-              <span
-                style={{color: this.state.valuesShadow[val.field].length >= val.params.maxLength ? '#e04240' : null}}>
-                {this.state.valuesShadow[val.field] ? (this.state.valuesShadow[val.field] + '').length : 0}
-              </span>
-              <span>/</span>
-              <span>{val.params.maxLength}</span>&nbsp;
-            </span>
-          }
-          <Icon
-            style={{color: '#aaaaaa', cursor: 'pointer'}}
-            type="close-circle"
-            theme="filled"
-            onClick={
-              () => {
-                this.state.values[val.field] = undefined;
-                this.state.valuesShadow[val.field] = undefined;
-                this.setState({
-                  values: this.state.values,
-                  valuesShadow: this.state.valuesShadow,
-                });
-                if (this.state.nodeShadow[val.field]) {
-                  this.state.nodeShadow[val.field].focus();
-                }
-              }
-            }
-          />
-        </div>
-      );
-    }
-    return null;
-  };
-
   binderValueFormatter = (val, result, result2) => {
     let value;
     switch (val.type) {
