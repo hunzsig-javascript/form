@@ -20,7 +20,6 @@ import {
   Slider, // Range
   Rate, // Rating
 } from 'antd';
-import {CompactPicker} from 'react-color';
 import ReactQuill from 'react-quill';
 import {Xoss} from 'oss';
 import './quill.css';
@@ -31,6 +30,7 @@ import {I18n} from "foundation";
 import ItemConst from "./Items/Const";
 import ItemString from "./Items/String";
 import ItemPassword from "./Items/Password";
+import ItemColor from "./Items/Color";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -702,25 +702,14 @@ export default class DesktopForm extends Component {
       case 'hex':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="hex" name={item.field} message={I18n.tr('pleaseTypeRightCode')}
-                               valueFormatter={(result) => {
-                                 return this.binderValueFormatter(item, result);
-                               }}>
-                  <CompactPicker
-                    className={`fromItemWidth${c} ${item.type}`}
-                    {...item.params}
-                    color={this.state.values[item.field]}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemColor
+              required={required}
+              item={item}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
@@ -1342,10 +1331,10 @@ export default class DesktopForm extends Component {
           </Col>
         );
         break;
-      case 'uploadHoss':
-      case 'uploadHossImage':
-      case 'uploadHossCrop':
-      case 'uploadHossDrag':
+      case 'xoss':
+      case 'xossImage':
+      case 'xossCrop':
+      case 'xossDrag':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <Row>
