@@ -24,6 +24,7 @@ export default class Radio extends Component {
     const item = this.props.item;
     const size = this.props.size;
     const col = this.props.col;
+    const map = item.map || [];
     const defaultValue = this.props.defaultValue;
     const className = `col${col} slice` + (this.state.errorMessage !== '' ? ' error' : '');
     const onChange = this.props.onChange;

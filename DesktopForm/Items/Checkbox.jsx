@@ -23,7 +23,7 @@ export default class Checkbox extends Component {
     const required = this.props.required;
     const item = this.props.item;
     const col = this.props.col;
-    const map = this.props.map;
+    const map = item.map || [];
     const defaultValue = this.props.defaultValue;
     const className = `col${col} slice` + (this.state.errorMessage !== '' ? ' error' : '');
     const onChange = this.props.onChange;

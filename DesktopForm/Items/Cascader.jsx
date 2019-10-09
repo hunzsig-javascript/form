@@ -6,7 +6,7 @@ import {I18n} from "foundation";
 
 import "./Select.scss";
 
-export default class Select extends Component {
+export default class Cascader extends Component {
 
   constructor(props) {
     super(props);
@@ -15,8 +15,12 @@ export default class Select extends Component {
     };
   }
 
-  formatter = (evt) => {
-    return evt;
+  formatter = (v1, v2) => {
+    let label = '';
+    v2.forEach((path) => {
+      label += label === '' ? path.label : ' ' + path.label;
+    });
+    return [v1, label];
   };
 
   render() {
@@ -30,30 +34,27 @@ export default class Select extends Component {
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
-      <Row className="ItemSelect">
+      <Row className="ItemCascader">
         <Col {...DefaultCol[col].label} className={`label ${required ? 'required' : ''}`}>
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Select
-            allowClear={!required}
+          <Cascader
+            style={{textAlign: 'left'}}
             className={className}
             size={size}
             placeholder={I18n.tr('pleaseChoose') + item.name}
             defaultValue={defaultValue}
-            showSearch={map.length > 8}
-            filterOption={(input, option) => {
-              if (option.props.disabled === true) return false;
-              else if (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0) return true;
-              else if (`${option.props.value}`.indexOf(input) >= 0) return true;
-              return false;
+            options={map}
+            showSearch={(inputValue, path) => {
+              return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
             }}
             onChange={(evt) => {
               const res = this.formatter(evt);
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !res ? item.label + I18n.tr('isRequired') : '';
+                  this.state.errorMessage = !res[0] ? item.label + I18n.tr('isRequired') : '';
                 }
               }
               this.setState({
@@ -63,18 +64,7 @@ export default class Select extends Component {
               onError(this.state.errorMessage);
             }}
             {...item.params}
-          >
-            {map.map((m) => {
-              return (
-                <Select.Option
-                  key={m.value}
-                  value={m.value}
-                  disabled={m.disabled || false}>
-                  {m.label}
-                </Select.Option>
-              );
-            })}
-          </Select>
+          />
           {this.state.errorMessage !== '' && <Error message={this.state.errorMessage}/>}
         </Col>
       </Row>

@@ -37,6 +37,7 @@ import ItemRadio from "./Items/Radio";
 import ItemCheckbox from "./Items/Checkbox";
 import ItemCheckboxCol from "./Items/CheckboxCol";
 import ItemSelect from "./Items/Select";
+import ItemCascader from "./Items/Cascader";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -367,9 +368,7 @@ export default class DesktopForm extends Component {
     c = item.col ? item.col : c;
     let tpl = null;
     let temp = null;
-    let map = item.map || [];
     const required = item.params !== undefined && item.params.required !== undefined && item.params.required === true;
-    const showSearch = map.length > 8;
     const align = 'center';
     const sizeIce = 'medium';
     const size = 'default';
@@ -574,7 +573,6 @@ export default class DesktopForm extends Component {
             <ItemCheckbox
               required={required}
               item={item}
-              map={map}
               col={c}
               defaultValue={this.state.values[item.field]}
               onChange={(result) => this.setField(item.field, result)}
@@ -589,7 +587,6 @@ export default class DesktopForm extends Component {
             <ItemCheckboxCol
               required={required}
               item={item}
-              map={map}
               col={c}
               defaultValue={this.state.values[item.field]}
               onChange={(result) => this.setField(item.field, result)}
@@ -627,8 +624,6 @@ export default class DesktopForm extends Component {
               required={required}
               item={item}
               size={size}
-              map={map}
-              showSearch={showSearch}
               col={c}
               defaultValue={this.state.values[item.field]}
               onChange={(result) => this.setField(item.field, result)}
@@ -640,32 +635,20 @@ export default class DesktopForm extends Component {
       case 'cascader':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type={item.binderType || 'array'} name={item.field}
-                               message={I18n.tr('pleaseChoose') + item.name} valueFormatter={(v1, v2) => {
-                  return this.binderValueFormatter(item, v1, v2);
-                }}>
-                  <Cascader
-                    style={{textAlign: 'left'}}
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    placeholder={I18n.tr('pleaseChoose') + item.name}
-                    defaultValue={this.state.values[item.field]}
-                    options={item.map}
-                    showSearch={(inputValue, path) => {
-                      return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
-                    }}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemCascader
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={
+                (result) => {
+                  this.setField(item.field, result[0]);
+                  this.state.values[item.field + '_label'] = result[1];
+                }
+              }
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
