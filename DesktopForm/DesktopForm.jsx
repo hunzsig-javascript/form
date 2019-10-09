@@ -32,6 +32,7 @@ import ItemPassword from "./Items/Password";
 import ItemColor from "./Items/Color";
 import ItemEmail from "./Items/Email";
 import ItemSearch from "./Items/Search";
+import ItemSearchText from "./Items/SearchText";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -499,44 +500,15 @@ export default class DesktopForm extends Component {
       case 'searchText':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} message={I18n.tr('pleaseTypeRight') + item.name}
-                               valueFormatter={(result) => {
-                                 return this.binderValueFormatter(item, result);
-                               }}>
-                  <Input.TextArea
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    placeholder={I18n.tr('pleaseType') + item.name}
-                    defaultValue={this.state.values[item.field]}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div style={{position: 'absolute', right: '5px', top: '5px'}}>
-                  <Button
-                    type="dashed"
-                    size="small"
-                    onClick={() => {
-                      if (typeof item.onSearch === 'function') {
-                        const callback = (callbackData = undefined) => {
-                          this.state.values[item.field] = callbackData;
-                          this.formChange(this.state.values);
-                        };
-                        item.onSearch(this.state.values[item.field], callback);
-                      }
-                    }}
-                  >
-                    {item.nameSub}
-                  </Button>
-                </div>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemSearchText
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
