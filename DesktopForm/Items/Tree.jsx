@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Tree} from 'antd';
+import {Row, Col, Icon, Tree as TreeAntd} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
@@ -25,19 +25,19 @@ export default class Tree extends Component {
       if (Array.isArray(d.children)) {
         tpl.push(
           (
-            <Tree.TreeNode
+            <TreeAntd.TreeNode
               key={pk}
               value={pk}
               title={`${d.label}`}
             >
               {this.renderTree(d.children, pk.split('-'))}
-            </Tree.TreeNode>
+            </TreeAntd.TreeNode>
           )
         );
       } else {
         tpl.push(
           (
-            <Tree.TreeNode
+            <TreeAntd.TreeNode
               key={pk}
               value={pk}
               title={`${d.label}`}
@@ -79,7 +79,7 @@ export default class Tree extends Component {
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Tree
+          <TreeAntd
             defaultExpandAll
             multiple
             checkable
@@ -106,7 +106,7 @@ export default class Tree extends Component {
             }}
           >
             {this.renderTree(map)}
-          </Tree>
+          </TreeAntd>
           {this.state.errorMessage !== '' && <Error message={this.state.errorMessage}/>}
         </Col>
       </Row>
