@@ -43,6 +43,8 @@ import ItemMunicipal from "./Items/Municipal";
 import ItemDatetime from "./Items/Datetime";
 import ItemDate from "./Items/Date";
 import ItemTime from "./Items/Time";
+import ItemYear from "./Items/Year";
+import ItemMonth from "./Items/Month";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -782,54 +784,38 @@ export default class DesktopForm extends Component {
       case 'year':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}
-                               valueFormatter={(date, dateStr) => {
-                                 return this.binderValueFormatter(item, date, dateStr);
-                               }}>
-                  <YearPicker
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={sizeIce}
-                    defaultValue={this.state.values[item.field]}
-                    formater={['YYYY']}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemYear
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={
+                (result) => {
+                  this.setField(item.field, result[1]);
+                }
+              }
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
       case 'month':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}
-                               valueFormatter={(date, dateStr) => {
-                                 return this.binderValueFormatter(item, date, dateStr);
-                               }}>
-                  <MonthPicker
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={sizeIce}
-                    defaultValue={this.state.values[item.field]}
-                    formater={['YYYY-MM']}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemMonth
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={
+                (result) => {
+                  this.setField(item.field, result[1]);
+                }
+              }
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
