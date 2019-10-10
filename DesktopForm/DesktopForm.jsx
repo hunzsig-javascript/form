@@ -40,6 +40,7 @@ import ItemCascader from "./Items/Cascader";
 import ItemRegion from "./Items/Region";
 import ItemProvincial from "./Items/Provincial";
 import ItemMunicipal from "./Items/Municipal";
+import ItemDatetime from "./Items/Datetime";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -276,20 +277,6 @@ export default class DesktopForm extends Component {
         break;
     }
     return value;
-  };
-
-
-  renderNet = (value) => {
-    let renderNet;
-    if (!value || (value.indexOf('.') >= 0 && value.indexOf('.', value.indexOf('.') + 1) >= 0)) {
-      renderNet = [];
-    } else {
-      renderNet = ['.com', '.cn', '.com.cn', '.org', '.net', '.cc', '.gov.cn', '.xin', '.top', '.wiki'].map((domain) => {
-        const net = `${value}${domain}`;
-        return <AutoComplete.Option key={net}>{net}</AutoComplete.Option>;
-      });
-    }
-    this.setState({renderNet});
   };
 
   renderTree = (data, prevKey) => {
@@ -736,28 +723,19 @@ export default class DesktopForm extends Component {
       case 'datetime':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder name={item.field} message={I18n.tr('pleaseChoose') + item.name}
-                               valueFormatter={(date, dateStr) => {
-                                 return this.binderValueFormatter(item, date, dateStr);
-                               }}>
-                  <DatePicker
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={sizeIce}
-                    defaultValue={this.state.values[item.field]}
-                    showTime={true}
-                    formater={['YYYY-MM-DD', 'HH:mm:ss']}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemDatetime
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={
+                (result) => {
+                  this.setField(item.field, result[1]);
+                }
+              }
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
