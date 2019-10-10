@@ -49,6 +49,7 @@ import ItemDatetimeRange from "./Items/DatetimeRange";
 import ItemDateRange from "./Items/DateRange";
 import ItemTimeRange from "./Items/TimeRange";
 import ItemTree from "./Items/Tree";
+import ItemTreeSelect from "./Items/TreeSelect";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -193,75 +194,6 @@ export default class DesktopForm extends Component {
         });
       }
     }
-  };
-
-  renderTree = (data, prevKey) => {
-    const tpl = [];
-    data.forEach((d) => {
-      prevKey = prevKey || [];
-      const pk = (prevKey.length > 0) ? (prevKey.join('-') + '-' + d.value) : d.value + '';
-      if (Array.isArray(d.children)) {
-        tpl.push(
-          (
-            <Tree.TreeNode
-              key={pk}
-              value={pk}
-              title={`${d.label}`}
-            >
-              {this.renderTree(d.children, pk.split('-'))}
-            </Tree.TreeNode>
-          )
-        );
-      } else {
-        tpl.push(
-          (
-            <Tree.TreeNode
-              key={pk}
-              value={pk}
-              title={`${d.label}`}
-            />
-          )
-        );
-      }
-    });
-    return tpl.map((t) => {
-      return t;
-    });
-  };
-
-  renderTreeSelect = (data, prevKey) => {
-    const tpl = [];
-    data.forEach((d) => {
-      prevKey = prevKey || [];
-      const pk = (prevKey.length > 0) ? (prevKey.join('-') + '-' + d.value) : d.value + '';
-      if (Array.isArray(d.children)) {
-        tpl.push(
-          (
-            <TreeSelect.TreeNode
-              key={pk}
-              value={pk}
-              title={`${d.label}`}
-            >
-              {this.renderTreeSelect(d.children, pk.split('-'))}
-            </TreeSelect.TreeNode>
-          )
-        );
-      } else {
-        tpl.push(
-          (
-            <TreeSelect.TreeNode
-              key={pk}
-              value={pk}
-              title={`${d.label}`}
-              isLeaf
-            />
-          )
-        );
-      }
-    });
-    return tpl.map((t) => {
-      return t;
-    });
   };
 
   renderFormItem = (c, item, idx) => {
@@ -872,46 +804,15 @@ export default class DesktopForm extends Component {
       case 'treeSelect':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={item.field} message={I18n.tr('pleaseChoose') + item.name}>
-                  <TreeSelect
-                    showSearch
-                    allowClear
-                    treeDefaultExpandAll
-                    defaultValue={item.value}
-                    treeCheckable={item.treeCheckable === undefined ? true : false}
-                    showCheckedStrategy={TreeSelect.SHOW_PARENT}
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    placeholder={I18n.tr('pleaseChoose') + item.name}
-                    searchPlaceholder={I18n.tr('pleaseChoose') + item.name}
-                    multiple
-                    defaultCheckedKeys={item.value || []}
-                    onChange={(checkKeys) => {
-                      const ckData = JSON.parse(JSON.stringify(checkKeys));
-                      const nckData = [];
-                      ckData.forEach((ck) => {
-                        const nck = ck.replace(TreeRoot + '-', '').replace(TreeRoot, '');
-                        if (nck.length > 0) {
-                          nckData.push(nck);
-                        }
-                      });
-                      this.state.values[item.field] = nckData;
-                      this.formChange(this.state.values);
-                    }}
-                    {...item.params}
-                  >
-                    {this.renderTreeSelect(map)}
-                  </TreeSelect>
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemTreeSelect
+              required={required}
+              item={item}
+              col={c}
+              size={size}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
