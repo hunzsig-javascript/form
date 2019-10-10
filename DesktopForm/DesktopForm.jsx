@@ -1,14 +1,6 @@
 import React, {Component} from 'react';
-import {
-  Row,
-  Col,
-  Alert,
-  message,
-  Icon,
-  Button,
-} from 'antd';
+import {Row, Col, Alert, message, Icon, Button} from 'antd';
 import {Xoss} from 'oss';
-import './quill.css';
 
 import {Api} from 'api';
 import {I18n} from "foundation";
@@ -28,6 +20,7 @@ import ItemSwitch from "./Items/Switch";
 import ItemRadio from "./Items/Radio";
 import ItemCheckbox from "./Items/Checkbox";
 import ItemCheckboxCol from "./Items/CheckboxCol";
+import ItemRate from "./Items/Rate";
 import ItemSelect from "./Items/Select";
 import ItemCascader from "./Items/Cascader";
 import ItemRegion from "./Items/Region";
@@ -421,25 +414,17 @@ export default class DesktopForm extends Component {
           </Col>
         );
         break;
-      case 'rating':
+      case 'rate':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="number" name={item.field}>
-                  <Rating
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    defaultValue={this.state.values[item.field]}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-              </Col>
-            </Row>
+            <ItemRate
+              required={required}
+              item={item}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
