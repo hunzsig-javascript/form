@@ -4,7 +4,6 @@ import {
   Col,
   Alert,
   message,
-  Cascader,
   Icon,
   Button,
   Tree,
@@ -44,9 +43,6 @@ import ItemMunicipal from "./Items/Municipal";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
-
-const provincialJson = require('./../assets/json/provincial').default;
-const municipalJson = require('./../assets/json/municipal').default;
 
 const {MonthPicker, YearPicker, RangePicker} = DatePicker;
 const TreeRoot = 'TREE';
