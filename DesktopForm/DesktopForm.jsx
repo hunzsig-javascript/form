@@ -45,6 +45,9 @@ import ItemDate from "./Items/Date";
 import ItemTime from "./Items/Time";
 import ItemYear from "./Items/Year";
 import ItemMonth from "./Items/Month";
+import ItemDatetimeRange from "./Items/DatetimeRange";
+import ItemDateRange from "./Items/DateRange";
+import ItemTimeRange from "./Items/TimeRange";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -790,11 +793,7 @@ export default class DesktopForm extends Component {
               size={size}
               col={c}
               defaultValue={this.state.values[item.field]}
-              onChange={
-                (result) => {
-                  this.setField(item.field, result[1]);
-                }
-              }
+              onChange={(result) => this.setField(item.field, result)}
               onError={(error) => this.setErrorStatus(error)}
             />
           </Col>
@@ -819,68 +818,60 @@ export default class DesktopForm extends Component {
           </Col>
         );
         break;
-      case 'rangeDatetime':
+      case 'datetimeRange':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder
-                  type="array"
-                  name={item.field}
-                  message={I18n.tr('pleaseChoose') + item.name + I18n.tr('range')}
-                  valueFormatter={(date, dateStr) => {
-                    return this.binderValueFormatter(item, date, dateStr);
-                  }}
-                >
-                  <RangePicker
-                    className={`fromItemWidth${c} ${item.type}`}
-                    style={{backgroundColor: 'transparent', border: '1px solid #E0E0E0'}}
-                    size={sizeIce}
-                    defaultValue={this.state.values[item.field]}
-                    showTime={true}
-                    formater={['YYYY-MM-DD', 'HH:mm:ss']}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemDatetimeRange
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={
+                (result) => {
+                  this.setField(item.field, result[1]);
+                }
+              }
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
-      case 'rangeDate':
+      case 'dateRange':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder
-                  type="array"
-                  name={item.field}
-                  message={I18n.tr('pleaseChoose') + item.name + I18n.tr('range')}
-                  valueFormatter={(date, dateStr) => {
-                    return this.binderValueFormatter(item, date, dateStr);
-                  }}
-                >
-                  <RangePicker
-                    className={`fromItemWidth${c} ${item.type}`}
-                    style={{backgroundColor: 'transparent', border: '1px solid #E0E0E0'}}
-                    size={sizeIce}
-                    defaultValue={this.state.values[item.field]}
-                    formater={['YYYY-MM-DD']}
-                    {...item.params}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemDateRange
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={
+                (result) => {
+                  this.setField(item.field, result[1]);
+                }
+              }
+              onError={(error) => this.setErrorStatus(error)}
+            />
+          </Col>
+        );
+        break;
+      case 'timeRange':
+        tpl = (
+          <Col key={idx} {...col[c]} align={align}>
+            <ItemTimeRange
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={
+                (result) => {
+                  this.setField(item.field, result[1]);
+                }
+              }
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;

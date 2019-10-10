@@ -4,11 +4,11 @@ import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
 
-import "./Month.scss";
+import "./DateRange.scss";
 
-const {MonthPicker} = DatePicker;
+const {RangePicker} = DatePicker;
 
-export default class Month extends Component {
+export default class DateRange extends Component {
 
   constructor(props) {
     super(props);
@@ -27,17 +27,18 @@ export default class Month extends Component {
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
-      <Row className="ItemMonth">
+      <Row className="ItemDateRange">
         <Col {...DefaultCol[col].label} className={`label ${required ? 'required' : ''}`}>
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <MonthPicker
+          <RangePicker
             className={className}
+            style={{backgroundColor: 'transparent', border: '1px solid #E0E0E0'}}
             size={size}
             defaultValue={defaultValue}
-            formater={['YYYY-MM']}
+            formater={['YYYY-MM-DD']}
             onChange={(dates, dateStrings) => {
               if (item.params) {
                 if (item.params.required) {
