@@ -6,13 +6,7 @@ import {
   message,
   Icon,
   Button,
-  Tree,
-  TreeSelect,
-  DatePicker,
-  Slider, // Range
-  Rate, // Rating
 } from 'antd';
-import ReactQuill from 'react-quill';
 import {Xoss} from 'oss';
 import './quill.css';
 
@@ -50,6 +44,7 @@ import ItemDateRange from "./Items/DateRange";
 import ItemTimeRange from "./Items/TimeRange";
 import ItemTree from "./Items/Tree";
 import ItemTreeSelect from "./Items/TreeSelect";
+import ItemRichQuill from "./Items/RichQuill";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
@@ -200,10 +195,8 @@ export default class DesktopForm extends Component {
     c = c < 1 ? 0 : c;
     c = item.col ? item.col : c;
     let tpl = null;
-    let temp = null;
     const required = item.params !== undefined && item.params.required !== undefined && item.params.required === true;
     const align = 'center';
-    const sizeIce = 'medium';
     const size = 'default';
     const col = {
       0: {xxs: 24, xs: 24, s: 24, m: 24, l: 24, xl: 24},
@@ -819,42 +812,14 @@ export default class DesktopForm extends Component {
       case 'richQuill':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].rich} style={styles.formRich}>
-                <ReactQuill
-                  readOnly={false}
-                  defaultValue={this.state.values[item.field] || ''}
-                  modules={{
-                    toolbar: [
-                      ['clean'],
-
-                      [{font: []}],
-                      [{header: [1, 2, 3, 4, 5, 6]}],
-                      [{size: []}],
-
-                      ['bold', 'italic', 'underline', 'strike'],
-                      [{color: []}, {background: []}],
-                      ['link', 'image', 'video'],
-                      [{align: []}],
-
-                      [{list: 'ordered'}, {list: 'bullet'}],
-                      [{indent: '-1'}, {indent: '+1'}],
-                      [{script: 'sub'}, {script: 'super'}],
-                      ['blockquote', 'code-block'],
-                      [{direction: 'rtl'}],
-                    ],
-                  }}
-                  onChange={(string) => {
-                    this.state.values[item.field] = string;
-                    this.formChange(this.state.values);
-                  }}
-                />
-              </Col>
-            </Row>
+            <ItemRichQuill
+              required={required}
+              item={item}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
