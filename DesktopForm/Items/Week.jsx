@@ -4,11 +4,11 @@ import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
 
-import "./TimeRange.scss";
+import "./Week.scss";
 
-const {RangePicker} = DatePicker;
+const {WeekPicker} = DatePicker;
 
-export default class TimeRange extends Component {
+export default class Week extends Component {
 
   constructor(props) {
     super(props);
@@ -27,19 +27,17 @@ export default class TimeRange extends Component {
     const onChange = this.props.onChange;
     const onError = this.props.onError;
     return (
-      <Row className="ItemTimeRange">
+      <Row className="ItemWeek">
         <Col {...DefaultCol[col].label} className={`label ${required ? 'required' : ''}`}>
           {item.icon && <Icon className="icon" type={item.icon}/>}
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <RangePicker
+          <WeekPicker
             className={className}
-            style={{backgroundColor: 'transparent', border: '1px solid #E0E0E0'}}
             size={size}
             defaultValue={defaultValue}
-            showTime={true}
-            formater={['HH:mm:ss']}
+            formater={['YYYY-MM-DD']}
             onChange={(dates, dateStrings) => {
               if (item.params) {
                 if (item.params.required) {

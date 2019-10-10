@@ -45,6 +45,7 @@ import ItemDate from "./Items/Date";
 import ItemTime from "./Items/Time";
 import ItemYear from "./Items/Year";
 import ItemMonth from "./Items/Month";
+import ItemWeek from "./Items/Week";
 import ItemDatetimeRange from "./Items/DatetimeRange";
 import ItemDateRange from "./Items/DateRange";
 import ItemTimeRange from "./Items/TimeRange";
@@ -803,6 +804,25 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <ItemMonth
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={
+                (result) => {
+                  this.setField(item.field, result[1]);
+                }
+              }
+              onError={(error) => this.setErrorStatus(error)}
+            />
+          </Col>
+        );
+        break;
+      case 'week':
+        tpl = (
+          <Col key={idx} {...col[c]} align={align}>
+            <ItemWeek
               required={required}
               item={item}
               size={size}
