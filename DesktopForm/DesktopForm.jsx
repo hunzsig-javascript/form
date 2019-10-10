@@ -9,7 +9,6 @@ import {
   Tree,
   TreeSelect,
   DatePicker,
-  TimePicker,
   Slider, // Range
   Rate, // Rating
 } from 'antd';
@@ -49,12 +48,10 @@ import ItemWeek from "./Items/Week";
 import ItemDatetimeRange from "./Items/DatetimeRange";
 import ItemDateRange from "./Items/DateRange";
 import ItemTimeRange from "./Items/TimeRange";
+import ItemTree from "./Items/Tree";
 import DefaultCol from "./Items/DefaultCol";
 
 import './DesktopForm.scss';
-
-const {MonthPicker, YearPicker, RangePicker} = DatePicker;
-const TreeRoot = 'TREE';
 
 export default class DesktopForm extends Component {
   static defaultProps = {};
@@ -196,95 +193,6 @@ export default class DesktopForm extends Component {
         });
       }
     }
-  };
-
-  binderValueFormatter = (val, result, result2) => {
-    let value;
-    switch (val.type) {
-      case 'datetime':
-      case 'date':
-      case 'time':
-      case 'year':
-      case 'month':
-      case 'rangeDatetime':
-      case 'rangeDate':
-        console.log(result);
-        console.log(result2);
-        value = result2;
-        break;
-      case 'net':
-      case 'email':
-        value = result.trim();
-        break;
-      case 'color':
-      case 'hex':
-        value = result.hex;
-        break;
-      case 'int':
-      case 'integer':
-        value = result.target.value.trim();
-        if (value === '-') break;
-        if (value === '' || value === null || !value) {
-          break;
-        }
-        value = parseInt(value, 10);
-        if (isNaN(value) || value === Infinity) {
-          value = '';
-        }
-        break;
-      case 'num':
-      case 'number':
-        value = result.target.value.trim();
-        if (value === '-') break;
-        if (value === '' || value === null || !value) {
-          break;
-        }
-        let last = value.substr(value.length - 1, 1);
-        if (last === '。' || last === '.') {
-          last = '.';
-          value = parseFloat(value) + last;
-        } else if (value.toString().indexOf('.') === -1) {
-          value = parseFloat(value);
-        }
-        const vsp = value.toString().split('.');
-        if (vsp.length >= 2) {
-          if (vsp[0].length >= 0 && vsp[1].length > 0) {
-            vsp[1] = (parseInt(vsp[1], 10) + 10 ** vsp[1].length).toString();
-            vsp[1] = vsp[1].substring(1, vsp[1].length);
-            value = parseInt(vsp[0], 10) + '.' + vsp[1];
-          }
-        }
-        if (value < val.min) {
-          value = val.min;
-        } else if (value > val.max) {
-          value = val.max;
-        }
-        if (isNaN(value) || value === Infinity) {
-          value = '';
-        }
-        break;
-      case 'cascader':
-      case 'region':
-      case 'provincial':
-      case 'municipal':
-        let n = '';
-        result2.forEach((path) => {
-          n += n === '' ? path.label : ' ' + path.label;
-        });
-        this.state.values[val.field + '_label'] = n;
-        value = result;
-        break;
-      case 'text':
-      case 'textarea':
-      case 'multiple':
-      case 'str':
-      case 'string':
-      case 'radio':
-      default:
-        value = result.target.value;
-        break;
-    }
-    return value;
   };
 
   renderTree = (data, prevKey) => {
@@ -949,53 +857,15 @@ export default class DesktopForm extends Component {
         break;
         */
       case 'tree':
-        // 如果是tree，整个根
-        map = [{
-          value: TreeRoot,
-          label: I18n.tr('chooseAll'),
-          children: JSON.parse(JSON.stringify(map)),
-        }];
-        if (Array.isArray(item.value)) {
-          temp = JSON.parse(JSON.stringify(item.value));
-          temp.forEach((treev, treeidx) => {
-            temp[treeidx] = TreeRoot + '-' + treev;
-          });
-        } else {
-          temp = [];
-        }
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={item.field}>
-                  <Tree
-                    defaultExpandAll
-                    multiple
-                    checkable
-                    defaultCheckedKeys={temp || []}
-                    onCheck={(checkKeys) => {
-                      const ckData = JSON.parse(JSON.stringify(checkKeys));
-                      const nckData = [];
-                      ckData.forEach((ck) => {
-                        const nck = ck.replace(TreeRoot + '-', '').replace(TreeRoot, '');
-                        if (nck.length > 0) {
-                          nckData.push(nck);
-                        }
-                      });
-                      this.state.values[item.field] = nckData;
-                      this.formChange(this.state.values);
-                    }}
-                  >
-                    {this.renderTree(map)}
-                  </Tree>
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemTree
+              required={required}
+              item={item}
+              col={c}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
