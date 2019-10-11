@@ -39,6 +39,7 @@ import ItemDateRange from "./Items/DateRange";
 import ItemTimeRange from "./Items/TimeRange";
 import ItemTree from "./Items/Tree";
 import ItemTreeSelect from "./Items/TreeSelect";
+import ItemTransfer from "./Items/Transfer";
 import ItemRichQuill from "./Items/RichQuill";
 import DefaultCol from "./Items/DefaultCol";
 
@@ -796,6 +797,20 @@ export default class DesktopForm extends Component {
               item={item}
               col={c}
               size={size}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
+          </Col>
+        );
+        break;
+      case 'transfer':
+        tpl = (
+          <Col key={idx} {...col[c]} align={align}>
+            <ItemTransfer
+              required={required}
+              item={item}
+              col={c}
               defaultValue={this.state.values[item.field]}
               onChange={(result) => this.setField(item.field, result)}
               onError={(error) => this.setErrorStatus(error)}

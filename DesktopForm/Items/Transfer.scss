@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+.ItemTransfer {
+
+  .icon {
+    margin-right: 3px;
+  }
+
+  .label{
+    height: 32px;
+    line-height: 32px;
+    text-align: right;
+    word-break: break-all;
+  }
+  .label.required{
+    color: #ff6d74;
+  }
+
+  .scope{
+
+    position: relative;
+    min-height: 32px;
+    line-height: 32px;
+    margin-bottom: 15px;
+
+    .error > input{
+      border: 1px solid #ff6d74;
+    }
+
+  }
+
+
+}
