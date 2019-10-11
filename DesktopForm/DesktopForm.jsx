@@ -26,6 +26,7 @@ import ItemCascader from "./Items/Cascader";
 import ItemRegion from "./Items/Region";
 import ItemProvincial from "./Items/Provincial";
 import ItemMunicipal from "./Items/Municipal";
+import ItemSlider from "./Items/Slider";
 import ItemDatetime from "./Items/Datetime";
 import ItemDate from "./Items/Date";
 import ItemTime from "./Items/Time";
@@ -523,26 +524,18 @@ export default class DesktopForm extends Component {
           </Col>
         );
         break;
-      case 'range':
+      case 'slider':
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
-            <Row>
-              <Col {...DefaultCol[c].label} className={`myFormLabel ${required ? 'required' : ''}`}>
-                {item.icon && <Icon className="myIcon" type={item.icon}/>}
-                {item.name && item.name.length > 0 && <label>{item.name}：</label>}
-              </Col>
-              <Col {...DefaultCol[c].item} style={styles.formItem}>
-                <IceFormBinder type="array" name={item.field}
-                               message={I18n.tr('pleaseChoose') + item.name + I18n.tr('range')}>
-                  <Range
-                    className={`fromItemWidth${c} ${item.type}`}
-                    size={size}
-                    defaultValue={this.state.values[item.field]}
-                  />
-                </IceFormBinder>
-                <div><IceFormError name={item.field}/></div>
-              </Col>
-            </Row>
+            <ItemSlider
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
           </Col>
         );
         break;
