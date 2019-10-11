@@ -27,6 +27,7 @@ import ItemRegion from "./Items/Region";
 import ItemProvincial from "./Items/Provincial";
 import ItemMunicipal from "./Items/Municipal";
 import ItemSlider from "./Items/Slider";
+import ItemSliderRange from "./Items/SliderRange";
 import ItemDatetime from "./Items/Datetime";
 import ItemDate from "./Items/Date";
 import ItemTime from "./Items/Time";
@@ -528,6 +529,21 @@ export default class DesktopForm extends Component {
         tpl = (
           <Col key={idx} {...col[c]} align={align}>
             <ItemSlider
+              required={required}
+              item={item}
+              size={size}
+              col={c}
+              defaultValue={this.state.values[item.field]}
+              onChange={(result) => this.setField(item.field, result)}
+              onError={(error) => this.setErrorStatus(error)}
+            />
+          </Col>
+        );
+        break;
+      case 'sliderRange':
+        tpl = (
+          <Col key={idx} {...col[c]} align={align}>
+            <ItemSliderRange
               required={required}
               item={item}
               size={size}
