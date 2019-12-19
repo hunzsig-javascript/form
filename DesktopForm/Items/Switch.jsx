@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Switch} from 'antd';
+import {Row, Col, Icon, Switch as AntdSwitch} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
@@ -35,7 +35,7 @@ export default class Switch extends Component {
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <Switch
+          <AntdSwitch
             className={className}
             size={size}
             defaultChecked={defaultValue}

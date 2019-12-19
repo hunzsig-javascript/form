@@ -4,7 +4,7 @@ import DefaultCol from "./DefaultCol";
 import Error from "./Error";
 import {I18n} from "foundation";
 
-import "./ItemInteger.scss";
+import "./Integer.scss";
 
 export default class String extends Component {
 
