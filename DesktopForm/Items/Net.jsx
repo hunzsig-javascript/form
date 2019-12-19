@@ -59,14 +59,14 @@ export default class Net extends Component {
                 })
               }}
             >
-              <Select.Option value="" disabled={true}>{I18n('protocol')}</Select.Option>
+              <Select.Option value="" disabled={true}>{I18n('PROTOCOL')}</Select.Option>
               <Select.Option value="http://">http://</Select.Option>
               <Select.Option value="https://">https://</Select.Option>
             </Select>
             <AutoComplete
               style={{width: '80%'}}
               size={size}
-              placeholder={I18n('pleaseType') + item.name}
+              placeholder={I18n('PLEASE_TYPE') + item.name}
               filterOption={false}
               hasClear={true}
               defaultValue={defaultValue}
@@ -74,11 +74,11 @@ export default class Net extends Component {
                 this.renderNet(evt);
                 const res = this.formatter(evt);
                 if (this.state.value === '') {
-                  this.state.errorMessage = I18n('pleaseChoose') + I18n('protocol');
+                  this.state.errorMessage = I18n('PLEASE_CHOOSE') + I18n('protocol');
                 }
                 if (item.params) {
                   if (item.params.required) {
-                    this.state.errorMessage += !res ? item.label + I18n('isRequired') : '';
+                    this.state.errorMessage += !res ? item.label + I18n('IS_REQUIRED') : '';
                   }
                 }
                 this.setState({

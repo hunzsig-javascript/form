@@ -42,7 +42,7 @@ export default class DateRange extends Component {
             onChange={(dates, dateStrings) => {
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !dateStrings ? item.label + I18n('isRequired') : '';
+                  this.state.errorMessage = !dateStrings ? item.label + I18n('IS_REQUIRED') : '';
                 }
               }
               this.setState({

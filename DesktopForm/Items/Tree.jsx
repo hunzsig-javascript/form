@@ -60,7 +60,7 @@ export default class Tree extends Component {
     // 如果是tree，整个根
     let map = [{
       value: TreeRoot,
-      label: I18n('chooseAll'),
+      label: I18n('CHOOSE_ALL'),
       children: JSON.parse(JSON.stringify(map)),
     }];
     let temp = null;
@@ -95,7 +95,7 @@ export default class Tree extends Component {
               });
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !nckData ? item.label + I18n('isRequired') : '';
+                  this.state.errorMessage = !nckData ? item.label + I18n('IS_REQUIRED') : '';
                 }
               }
               this.setState({

@@ -48,7 +48,7 @@ export default class Municipal extends Component {
               options={municipalJson}
               defaultValue={defaultValue}
               allowClear={true}
-              placeholder={I18n('pleaseChoose') + item.name}
+              placeholder={I18n('PLEASE_CHOOSE') + item.name}
               showSearch={(inputValue, path) => {
                 return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
               }}
@@ -56,7 +56,7 @@ export default class Municipal extends Component {
                 const res = this.formatter(evt);
                 if (item.params) {
                   if (item.params.required) {
-                    this.state.errorMessage = !res[0] ? item.label + I18n('isRequired') : '';
+                    this.state.errorMessage = !res[0] ? item.label + I18n('IS_REQUIRED') : '';
                   }
                 }
                 this.setState({

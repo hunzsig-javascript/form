@@ -40,7 +40,7 @@ export default class Select extends Component {
             allowClear={!required}
             className={className}
             size={size}
-            placeholder={I18n('pleaseChoose') + item.name}
+            placeholder={I18n('PLEASE_CHOOSE') + item.name}
             defaultValue={defaultValue}
             showSearch={map.length > 8}
             filterOption={(input, option) => {
@@ -53,7 +53,7 @@ export default class Select extends Component {
               const res = this.formatter(evt);
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !res ? item.label + I18n('isRequired') : '';
+                  this.state.errorMessage = !res ? item.label + I18n('IS_REQUIRED') : '';
                 }
               }
               this.setState({

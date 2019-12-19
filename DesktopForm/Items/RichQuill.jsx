@@ -57,7 +57,7 @@ export default class RichQuill extends Component {
             onChange={(string) => {
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !string ? item.label + I18n('isRequired') : '';
+                  this.state.errorMessage = !string ? item.label + I18n('IS_REQUIRED') : '';
                 }
               }
               this.setState({

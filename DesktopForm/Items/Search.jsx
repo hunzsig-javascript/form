@@ -57,10 +57,10 @@ export default class Search extends Component {
           {item.label && item.label.length > 0 && <label>{item.label}：</label>}
         </Col>
         <Col className="scope" {...DefaultCol[col].item}>
-          <span>{I18n('pleaseType') + item.name}</span>
+          <span>{I18n('PLEASE_TYPE') + item.name}</span>
           <Input
             style={{position: 'absolute', left: 0, top: 0, bottom: 0, right: 0, opacity: 0}}
-            placeholder={I18n('pleaseType') + item.name}
+            placeholder={I18n('PLEASE_TYPE') + item.name}
             value={defaultValue}
             readOnly={true}
             required={item.params && item.params.required ? item.params.required : false}
@@ -68,13 +68,13 @@ export default class Search extends Component {
               const res = this.formatter(evt);
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !res ? item.label + I18n('isRequired') : '';
+                  this.state.errorMessage = !res ? item.label + I18n('IS_REQUIRED') : '';
                 }
                 if (item.params.minLength && res.length < item.params.minLength) {
-                  this.state.errorMessage = item.label + ' ' + I18n('tooShort');
+                  this.state.errorMessage = item.label + ' ' + I18n('TOO_SHORT');
                 }
                 if (item.params.maxLength && res.length > item.params.maxLength) {
-                  this.state.errorMessage = item.label + ' ' + I18n('tooLong');
+                  this.state.errorMessage = item.label + ' ' + I18n('TOO_LONG');
                 }
               }
               this.setState({
@@ -89,7 +89,7 @@ export default class Search extends Component {
             <Input.Search
               className={className}
               size={size}
-              placeholder={(item.params && item.params.placeholder) ? item.params.placeholder : `${I18n('pleaseChooseByClick')}${item.name}`}
+              placeholder={(item.params && item.params.placeholder) ? item.params.placeholder : `${I18n('PLEASE_CHOOSE_BY_CLICK')}${item.name}`}
               defaultValue={shadowValue ? shadowValue : ''}
               ref={node => this.state.nodeShadow = node}
               readOnly={true}

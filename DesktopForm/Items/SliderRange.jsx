@@ -44,7 +44,7 @@ export default class SliderRange extends Component {
               const res = this.formatter(evt);
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !res ? item.label + I18n('isRequired') : '';
+                  this.state.errorMessage = !res ? item.label + I18n('IS_REQUIRED') : '';
                 }
               }
               this.setState({
