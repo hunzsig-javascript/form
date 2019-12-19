@@ -68,7 +68,7 @@ export default class Transfer extends Component {
 
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !res ? item.label + I18n.tr('isRequired') : '';
+                  this.state.errorMessage = !res ? item.label + I18n('isRequired') : '';
                 }
               }
               this.setState({

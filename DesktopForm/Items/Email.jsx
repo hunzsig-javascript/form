@@ -53,7 +53,7 @@ export default class Email extends Component {
           <AutoComplete
             className={className}
             size={size}
-            placeholder={I18n.tr('pleaseType') + item.name}
+            placeholder={I18n('pleaseType') + item.name}
             filterOption={false}
             hasClear={true}
             defaultValue={defaultValue}
@@ -62,13 +62,13 @@ export default class Email extends Component {
               const res = this.formatter(evt);
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !res ? item.label + I18n.tr('isRequired') : '';
+                  this.state.errorMessage = !res ? item.label + I18n('isRequired') : '';
                 }
                 if (item.params.minLength && res.length < item.params.minLength) {
-                  this.state.errorMessage = item.label + ' ' + I18n.tr('tooShort');
+                  this.state.errorMessage = item.label + ' ' + I18n('tooShort');
                 }
                 if (item.params.maxLength && res.length > item.params.maxLength) {
-                  this.state.errorMessage = item.label + ' ' + I18n.tr('tooLong');
+                  this.state.errorMessage = item.label + ' ' + I18n('tooLong');
                 }
               }
               this.setState({

@@ -54,19 +54,19 @@ export default class String extends Component {
           <Input
             className={className}
             size={size}
-            placeholder={I18n.tr('pleaseType') + item.name}
+            placeholder={I18n('pleaseType') + item.name}
             allowClear={true}
             defaultValue={defaultValue}
             onChange={(evt) => {
               if (isNaN(evt.target.value)) {
-                this.state.errorMessage = I18n.tr('pleaseFillRightInt');
+                this.state.errorMessage = I18n('pleaseFillRightInt');
               } else if (!Number.isInteger(evt.target.value)) {
-                this.state.errorMessage = I18n.tr('pleaseFillRightInt');
+                this.state.errorMessage = I18n('pleaseFillRightInt');
               }
               const res = this.formatter(evt, item.min, item.max);
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !res ? item.label + I18n.tr('isRequired') : '';
+                  this.state.errorMessage = !res ? item.label + I18n('isRequired') : '';
                 }
               }
               this.setState({

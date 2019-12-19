@@ -909,7 +909,7 @@ export default class DesktopForm extends Component {
                           disabled={this.state.loading || this.state.errorStatus === true}
                           loading={this.state.loading}
                         >
-                          {op.label || I18n.tr('submit')}
+                          {op.label || I18n('submit')}
                         </Button>
                       );
                       break;
@@ -923,7 +923,7 @@ export default class DesktopForm extends Component {
                           disabled={this.state.loading}
                           loading={this.state.loading}
                         >
-                          {op.label || I18n.tr('reset')}
+                          {op.label || I18n('reset')}
                         </Button>
                       );
                       break;
@@ -937,7 +937,7 @@ export default class DesktopForm extends Component {
                           loading={this.state.loading}
                           {...op.params}
                         >
-                          {op.label || I18n.tr('trigger')}
+                          {op.label || I18n('trigger')}
                         </Button>
                       );
                       break;

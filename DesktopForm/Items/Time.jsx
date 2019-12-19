@@ -40,7 +40,7 @@ export default class Time extends Component {
             onChange={(dates, dateStrings) => {
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !dateStrings ? item.label + I18n.tr('isRequired') : '';
+                  this.state.errorMessage = !dateStrings ? item.label + I18n('isRequired') : '';
                 }
               }
               this.setState({

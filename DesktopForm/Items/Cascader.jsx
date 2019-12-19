@@ -44,7 +44,7 @@ export default class Cascader extends Component {
             style={{textAlign: 'left'}}
             className={className}
             size={size}
-            placeholder={I18n.tr('pleaseChoose') + item.name}
+            placeholder={I18n('pleaseChoose') + item.name}
             defaultValue={defaultValue}
             options={map}
             showSearch={(inputValue, path) => {
@@ -54,7 +54,7 @@ export default class Cascader extends Component {
               const res = this.formatter(evt);
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !res[0] ? item.label + I18n.tr('isRequired') : '';
+                  this.state.errorMessage = !res[0] ? item.label + I18n('isRequired') : '';
                 }
               }
               this.setState({

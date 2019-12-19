@@ -48,7 +48,7 @@ export default class Provincial extends Component {
               options={provincialJson}
               defaultValue={defaultValue}
               allowClear={true}
-              placeholder={I18n.tr('pleaseChoose') + item.name}
+              placeholder={I18n('pleaseChoose') + item.name}
               showSearch={(inputValue, path) => {
                 return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
               }}
@@ -56,7 +56,7 @@ export default class Provincial extends Component {
                 const res = this.formatter(evt);
                 if (item.params) {
                   if (item.params.required) {
-                    this.state.errorMessage = !res[0] ? item.label + I18n.tr('isRequired') : '';
+                    this.state.errorMessage = !res[0] ? item.label + I18n('isRequired') : '';
                   }
                 }
                 this.setState({

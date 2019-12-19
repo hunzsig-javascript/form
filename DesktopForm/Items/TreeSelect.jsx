@@ -64,7 +64,7 @@ export default class TreeSelect extends Component {
     // 如果是tree，整个根
     let map = [{
       value: TreeRoot,
-      label: I18n.tr('chooseAll'),
+      label: I18n('chooseAll'),
       children: JSON.parse(JSON.stringify(map)),
     }];
     let temp = null;
@@ -92,8 +92,8 @@ export default class TreeSelect extends Component {
             showCheckedStrategy={TreeSelectAntd.SHOW_PARENT}
             className={className}
             size={size}
-            placeholder={I18n.tr('pleaseChoose') + item.name}
-            searchPlaceholder={I18n.tr('pleaseChoose') + item.name}
+            placeholder={I18n('pleaseChoose') + item.name}
+            searchPlaceholder={I18n('pleaseChoose') + item.name}
             multiple
             defaultCheckedKeys={item.value || []}
             onChange={(checkKeys) => {
@@ -107,7 +107,7 @@ export default class TreeSelect extends Component {
               });
               if (item.params) {
                 if (item.params.required) {
-                  this.state.errorMessage = !nckData ? item.label + I18n.tr('isRequired') : '';
+                  this.state.errorMessage = !nckData ? item.label + I18n('isRequired') : '';
                 }
               }
               this.setState({
