@@ -3,7 +3,7 @@ import {Row, Col, Alert, message, Icon, Button} from 'antd';
 import {Xoss} from 'oss';
 
 import {Api} from 'api';
-import {I18n} from "foundation";
+import {I18n} from "basic";
 
 import ItemConst from "./Items/Const";
 import ItemString from "./Items/String";

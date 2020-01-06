@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Row, Col, Icon, Checkbox as CheckboxAntd} from 'antd';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
-import {I18n} from "foundation";
+import {I18n} from "basic";
 
 import "./Checkbox.scss";
 

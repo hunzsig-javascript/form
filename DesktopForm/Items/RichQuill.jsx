@@ -3,7 +3,7 @@ import {Row, Col, Icon} from 'antd';
 import ReactQuill from 'react-quill';
 import DefaultCol from "./DefaultCol";
 import Error from "./Error";
-import {I18n} from "foundation";
+import {I18n} from "basic";
 
 import './RichQuill.d.css';
 import "./RichQuill.scss";
